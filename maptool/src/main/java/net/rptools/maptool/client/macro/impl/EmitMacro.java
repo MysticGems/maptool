@@ -30,7 +30,7 @@ public class EmitMacro extends AbstractMacro {
 			return;
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("<i><b>").append(macro).append("</b></i>");
+		sb.append(macro);
 		MapTool.addMessage(TextMessage.say(context.getTransformationHistory(), sb.toString()));
 	}
 }
