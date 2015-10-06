@@ -25,10 +25,12 @@ import net.rptools.maptool.model.TextMessage;
 public class EmitMacro extends AbstractMacro {
 	public void execute(MacroContext context, String macro, MapToolMacroContext executionContext) {
 		macro = processText(macro);
+		/*
 		if (!MapTool.getPlayer().isGM()) {
 			MapTool.addMessage(TextMessage.me(context.getTransformationHistory(), "<b>" + I18N.getText("slash.mustBeGM", "emit") + "</b>"));
 			return;
 		}
+		*/
 		StringBuilder sb = new StringBuilder();
 		sb.append(macro);
 		MapTool.addMessage(TextMessage.say(context.getTransformationHistory(), sb.toString()));
