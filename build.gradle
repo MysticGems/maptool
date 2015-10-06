@@ -313,7 +313,7 @@ task osxApp() << {
             option(value: '-Dapple.laf-useScreenMenuBar=true')
             option(value: '-Dfile.encoding=UTF-8')
             option(value: '-Xmx768m')
-            option(value: '-Xss4m')
+            option(value: '-Xss16m')
             option(value: '-Dcom.apple.textantialiasing=true')
             option(value: '-Dcom.apple.antialiasing=true')
             option(value: '-Djava.library.path=$APP_ROOT/Contents/Java')
