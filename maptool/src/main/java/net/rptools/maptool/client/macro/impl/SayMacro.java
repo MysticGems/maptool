@@ -54,11 +54,11 @@ public class SayMacro extends AbstractMacro {
 			sb.append("<span class='trustedPrefix' ").append("title='").append(executionContext.getName());
 			sb.append("@").append(executionContext.getSouce()).append("'>");
 		}
-		sb.append(identity).append(": ");
+		sb.append(identity).append(" says, ");
 		if (executionContext != null && MapTool.getParser().isMacroPathTrusted() && !MapTool.getPlayer().isGM()) {
 			sb.append("</span>");
 		}
-		sb.append("</td><td valign=top>");
+		sb.append("\"");
 
 		Color color = MapTool.getFrame().getCommandPanel().getTextColorWell().getColor();
 		if (color != null) {
@@ -68,7 +68,7 @@ public class SayMacro extends AbstractMacro {
 		if (color != null) {
 			sb.append("</span>");
 		}
-		sb.append("</td>");
+		sb.append("\"</td>");
 		sb.append("</tr></table>");
 		MapTool.addMessage(TextMessage.say(context.getTransformationHistory(), sb.toString()));
 	}
