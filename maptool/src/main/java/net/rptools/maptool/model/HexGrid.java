@@ -1,12 +1,12 @@
 /*
- *  This software copyright by various authors including the RPTools.net
- *  development team, and licensed under the LGPL Version 3 or, at your
- *  option, any later version.
+ * This software copyright by various authors including the RPTools.net
+ * development team, and licensed under the LGPL Version 3 or, at your option,
+ * any later version.
  *
- *  Portions of this software were originally covered under the Apache
- *  Software License, Version 1.1 or Version 2.0.
+ * Portions of this software were originally covered under the Apache Software
+ * License, Version 1.1 or Version 2.0.
  *
- *  See the file LICENSE elsewhere in this distribution for license details.
+ * See the file LICENSE elsewhere in this distribution for license details.
  */
 
 package net.rptools.maptool.model;
@@ -133,7 +133,7 @@ public abstract class HexGrid extends Grid {
 		 * @return a {@link Shape} representing one slice of the 6-slice pie </div>
 		 */
 		public Shape getFogAreaToCheck(int dir) {
-//			pieSlices = null; // debugging -- forces the following IF statement to always be true
+			//			pieSlices = null; // debugging -- forces the following IF statement to always be true
 			if (pieSlices == null) {
 				double coords[][] = {
 						{ 0, 0, -114, 0, -57, -100 }, // NW
@@ -166,13 +166,39 @@ public abstract class HexGrid extends Grid {
 
 	/** One-half the length of an edge. Set to sqrt(edgeLength^2 - minorRadius^2), i.e. one side of a right triangle. */
 	private double edgeProjection;
+
+	public double getEdgeProjection() {
+		return edgeProjection;
+	}
+
+	public void setEdgeProjection(double edgeProjection) {
+		this.edgeProjection = edgeProjection;
+	}
+
 	/** Distance from centerpoint to middle of a face. Set to gridSize/2. */
 	private double minorRadius;
+
+	public double getMinorRadius() {
+		return minorRadius;
+	}
+
+	public void setMinorRadius(double minorRadius) {
+		this.minorRadius = minorRadius;
+	}
+
 	/**
 	 * Distance from centerpoint to vertex. Set to minorRadius/hexRatio (basically, uses 30 degree cosine to calculate
 	 * sqrt(3)/2).
 	 */
 	private double edgeLength;
+
+	public double getEdgeLength() {
+		return edgeLength;
+	}
+
+	public void setEdgeLength(double edgeLength) {
+		this.edgeLength = edgeLength;
+	}
 
 	// Hex defining variables scaled for zoom
 	private double scaledEdgeProjection;
@@ -213,7 +239,7 @@ public abstract class HexGrid extends Grid {
 		zp.x -= w / 2 + getOffsetX();
 		zp.y -= h / 2 + getOffsetY();
 
-//		System.out.println(new Rectangle(zp.x, zp.y, w, h));
+		//		System.out.println(new Rectangle(zp.x, zp.y, w, h));
 		return new Rectangle(zp.x, zp.y, w, h);
 	}
 
@@ -262,6 +288,8 @@ public abstract class HexGrid extends Grid {
 
 	@Override
 	public void setSize(int size) {
+		super.setSize(size);
+
 		if (hexRatio == 0) {
 			hexRatio = REGULAR_HEX_RATIO;
 		}
@@ -271,15 +299,13 @@ public abstract class HexGrid extends Grid {
 
 		minorRadius = (double) size / 2;
 		edgeLength = minorRadius / hexRatio;
-//		edgeProjection = Math.sqrt(edgeLength * edgeLength - minorRadius * minorRadius); // Pythagorus
+		//		edgeProjection = Math.sqrt(edgeLength * edgeLength - minorRadius * minorRadius); // Pythagorus
 		edgeProjection = edgeLength / 2; // It's an isosceles triangle, after all!
 
 		scaledHex = null;
 
 		// Cell offset gives the offset to apply to the cell zone coords to draw images/tokens
 		cellOffset = setCellOffset();
-
-		super.setSize(size);
 	}
 
 	protected void createShape(double scale) {
@@ -492,8 +518,8 @@ public abstract class HexGrid extends Grid {
 
 		double m = edgeProjection / minorRadius;
 
-//		System.out.format("gx:%d gy:%d px:%d py:%d m:%f\n", xSect, ySect, xPxl, yPxl, m);
-//		System.out.format("gx:%d gy:%d px:%d py:%d\n", xSect, ySect, zp.x, zp.y);
+		//		System.out.format("gx:%d gy:%d px:%d py:%d m:%f\n", xSect, ySect, xPxl, yPxl, m);
+		//		System.out.format("gx:%d gy:%d px:%d py:%d\n", xSect, ySect, zp.x, zp.y);
 
 		switch (Math.abs(xSect) % 2) {
 		case 0:
@@ -530,7 +556,7 @@ public abstract class HexGrid extends Grid {
 
 			break;
 		}
-//		System.out.format("gx:%d gy:%d\n", gridX, gridY);
+		//		System.out.format("gx:%d gy:%d\n", gridX, gridY);
 		return new CellPoint(gridX, gridY);
 	}
 

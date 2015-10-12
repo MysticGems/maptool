@@ -1,12 +1,12 @@
 /*
- *  This software copyright by various authors including the RPTools.net
- *  development team, and licensed under the LGPL Version 3 or, at your
- *  option, any later version.
+ * This software copyright by various authors including the RPTools.net
+ * development team, and licensed under the LGPL Version 3 or, at your option,
+ * any later version.
  *
- *  Portions of this software were originally covered under the Apache
- *  Software License, Version 1.1 or Version 2.0.
+ * Portions of this software were originally covered under the Apache Software
+ * License, Version 1.1 or Version 2.0.
  *
- *  See the file LICENSE elsewhere in this distribution for license details.
+ * See the file LICENSE elsewhere in this distribution for license details.
  */
 
 package net.rptools.maptool.client.ui;
@@ -50,6 +50,7 @@ import net.rptools.maptool.model.Grid;
 import net.rptools.maptool.model.Light;
 import net.rptools.maptool.model.LightSource;
 import net.rptools.maptool.model.Token;
+import net.rptools.maptool.model.Token.TokenShape;
 import net.rptools.maptool.model.TokenFootprint;
 import net.rptools.maptool.model.Zone;
 import net.rptools.maptool.model.ZonePoint;
@@ -139,7 +140,8 @@ public abstract class AbstractTokenPopupMenu extends JPopupMenu {
 			LightSource[] lightSourceList = new LightSource[entry.getValue().size()];
 			lightSources.toArray(lightSourceList);
 			Arrays.sort(lightSourceList);
-			LIGHTSOURCES: for (LightSource lightSource : lightSourceList) {
+			LIGHTSOURCES:
+			for (LightSource lightSource : lightSourceList) {
 				for (Light light : lightSource.getLightList()) {
 					if (light.isGM() && !MapTool.getPlayer().isGM()) {
 						continue LIGHTSOURCES;
@@ -193,6 +195,24 @@ public abstract class AbstractTokenPopupMenu extends JPopupMenu {
 						continue;
 					}
 					token.setFlippedY(!token.isFlippedY());
+					renderer.flush(token);
+					MapTool.serverCommand().putToken(renderer.getZone().getId(), token);
+				}
+				MapTool.getFrame().refresh();
+			}
+		});
+		flipMenu.add(new AbstractAction() {
+			{
+				putValue(NAME, "Isometric Plane");
+			}
+
+			public void actionPerformed(ActionEvent e) {
+				for (GUID tokenGUID : selectedTokenSet) {
+					Token token = renderer.getZone().getToken(tokenGUID);
+					if (token == null) {
+						continue;
+					}
+					token.setFlippedIso(!token.isFlippedIso());
 					renderer.flush(token);
 					MapTool.serverCommand().putToken(renderer.getZone().getId(), token);
 				}
@@ -335,14 +355,16 @@ public abstract class AbstractTokenPopupMenu extends JPopupMenu {
 				switch (layer) {
 				case BACKGROUND:
 				case OBJECT:
-					token.setShape(Token.TokenShape.TOP_DOWN);
+					if (token.getShape() != TokenShape.FIGURE)
+						token.setShape(TokenShape.TOP_DOWN);
 					break;
 				case TOKEN:
 					Image image = ImageManager.getImage(token.getImageAssetId());
 					if (image == null || image == ImageManager.TRANSFERING_IMAGE) {
 						token.setShape(Token.TokenShape.TOP_DOWN);
 					} else {
-						token.setShape(TokenUtil.guessTokenType(image));
+						if (token.getShape() != TokenShape.FIGURE)
+							token.setShape(TokenUtil.guessTokenType(image));
 					}
 					break;
 				}
@@ -826,7 +848,7 @@ public abstract class AbstractTokenPopupMenu extends JPopupMenu {
 			}
 		}
 	}
-	
+
 	public class AutoResizeAction extends AbstractAction {
 		public AutoResizeAction() {
 			super(I18N.getText("token.popup.menu.autoresize"));

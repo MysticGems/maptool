@@ -1,12 +1,12 @@
 /*
- *  This software copyright by various authors including the RPTools.net
- *  development team, and licensed under the LGPL Version 3 or, at your
- *  option, any later version.
+ * This software copyright by various authors including the RPTools.net
+ * development team, and licensed under the LGPL Version 3 or, at your option,
+ * any later version.
  *
- *  Portions of this software were originally covered under the Apache
- *  Software License, Version 1.1 or Version 2.0.
+ * Portions of this software were originally covered under the Apache Software
+ * License, Version 1.1 or Version 2.0.
  *
- *  See the file LICENSE elsewhere in this distribution for license details.
+ * See the file LICENSE elsewhere in this distribution for license details.
  */
 
 package net.rptools.maptool.client.ui.token;
@@ -34,6 +34,7 @@ import net.rptools.maptool.client.AppStyle;
 import net.rptools.maptool.client.MapTool;
 import net.rptools.maptool.model.Token;
 import net.rptools.maptool.model.Zone;
+import net.rptools.maptool.model.Token.TokenShape;
 import net.rptools.maptool.util.ImageManager;
 
 /**
@@ -156,6 +157,15 @@ public class TokenLayoutPanel extends JPanel {
 
 		Rectangle tokenSize = token.getBounds(zone);
 		Dimension imgSize = new Dimension(image.getWidth(), image.getHeight());
+
+		// If figure we need to calculate an additional offset for the token height
+		double iso_ho = 0;
+		if (token.getShape() == TokenShape.FIGURE) {
+			double th = token.getHeight() * Double.valueOf(tokenSize.width) / token.getWidth();
+			iso_ho = tokenSize.height - th;
+			tokenSize = new Rectangle(tokenSize.x, tokenSize.y - (int) iso_ho, tokenSize.width, (int) th);
+		}
+
 		SwingUtil.constrainTo(imgSize, tokenSize.width, tokenSize.height);
 
 		Point centerPoint = new Point(size.width / 2, size.height / 2);
@@ -174,9 +184,10 @@ public class TokenLayoutPanel extends JPanel {
 			g2d.setColor(Color.black);
 
 			// Add horizontal and vertical lines to help with centering
-			g2d.drawLine(0, size.height / 2, size.width, size.height / 2);
-			g2d.drawLine(size.width / 2, 0, size.width / 2, size.height);
+			g2d.drawLine(0, (size.height - (int) iso_ho) / 2, size.width, (size.height - (int) iso_ho) / 2);
+			g2d.drawLine(size.width / 2, 0, size.width / 2, (size.height - (int) iso_ho));
 
+			offsetY = offsetY - (int) (iso_ho / 2);
 			g2d.translate(offsetX, offsetY);
 			g2d.draw(gridShape);
 			g2d.translate(-offsetX, -offsetY);

@@ -1,12 +1,12 @@
 /*
- *  This software copyright by various authors including the RPTools.net
- *  development team, and licensed under the LGPL Version 3 or, at your
- *  option, any later version.
+ * This software copyright by various authors including the RPTools.net
+ * development team, and licensed under the LGPL Version 3 or, at your option,
+ * any later version.
  *
- *  Portions of this software were originally covered under the Apache
- *  Software License, Version 1.1 or Version 2.0.
+ * Portions of this software were originally covered under the Apache Software
+ * License, Version 1.1 or Version 2.0.
  *
- *  See the file LICENSE elsewhere in this distribution for license details.
+ * See the file LICENSE elsewhere in this distribution for license details.
  */
 
 package net.rptools.maptool.client.ui;
@@ -58,6 +58,7 @@ import net.rptools.maptool.model.GridFactory;
 import net.rptools.maptool.model.GridlessGrid;
 import net.rptools.maptool.model.HexGridHorizontal;
 import net.rptools.maptool.model.HexGridVertical;
+import net.rptools.maptool.model.IsometricGrid;
 import net.rptools.maptool.model.SquareGrid;
 import net.rptools.maptool.model.Zone;
 import net.rptools.maptool.model.drawing.DrawablePaint;
@@ -127,6 +128,7 @@ public class MapPropertiesDialog extends JDialog {
 		initPixelsPerCellTextField();
 		initDefaultVisionTextField();
 
+		initIsometricRadio();
 		initHexHoriRadio();
 		initHexVertRadio();
 		initSquareRadio();
@@ -189,6 +191,14 @@ public class MapPropertiesDialog extends JDialog {
 		return formPanel.getRadioButton("noGridRadio");
 	}
 
+	public JRadioButton getIsometricRadio() {
+		return formPanel.getRadioButton("isoRadio");
+	}
+
+	public JRadioButton getIsometricHexRadio() {
+		return formPanel.getRadioButton("isoHexRadio");
+	}
+
 	public void setZone(Zone zone) {
 		this.zone = zone;
 		copyZoneToUI();
@@ -199,9 +209,9 @@ public class MapPropertiesDialog extends JDialog {
 		getDistanceTextField().setText(Integer.toString(zone.getUnitsPerCell()));
 		getPixelsPerCellTextField().setText(Integer.toString(zone.getGrid().getSize()));
 		getDefaultVisionTextField().setText(Integer.toString(zone.getTokenVisionDistance()));
-
-		getHexHorizontalRadio().setSelected(zone.getGrid() instanceof HexGridHorizontal);
 		getHexVerticalRadio().setSelected(zone.getGrid() instanceof HexGridVertical);
+		getIsometricRadio().setSelected(zone.getGrid() instanceof IsometricGrid);
+		getHexHorizontalRadio().setSelected(zone.getGrid() instanceof HexGridHorizontal);
 		getSquareRadio().setSelected(zone.getGrid() instanceof SquareGrid);
 		getNoGridRadio().setSelected(zone.getGrid() instanceof GridlessGrid);
 
@@ -220,6 +230,10 @@ public class MapPropertiesDialog extends JDialog {
 		zone.setBackgroundPaint(backgroundPaint);
 		zone.setMapAsset(mapAsset != null ? mapAsset.getId() : null);
 		// TODO: Handle grid type changes
+	}
+
+	private void initIsometricRadio() {
+		getIsometricRadio().setSelected(GridFactory.isIsometric(AppPreferences.getDefaultGridType()));
 	}
 
 	private void initHexHoriRadio() {
@@ -407,6 +421,9 @@ public class MapPropertiesDialog extends JDialog {
 		if (getSquareRadio().isSelected()) {
 			grid = GridFactory.createGrid(GridFactory.SQUARE, AppPreferences.getFaceEdge(), AppPreferences.getFaceVertex());
 		}
+		if (getIsometricRadio().isSelected()) {
+			grid = GridFactory.createGrid(GridFactory.ISOMETRIC, AppPreferences.getFaceEdge(), AppPreferences.getFaceVertex());
+		}
 		if (getNoGridRadio().isSelected()) {
 			grid = GridFactory.createGrid(GridFactory.NONE);
 		}
@@ -442,7 +459,7 @@ public class MapPropertiesDialog extends JDialog {
 
 			JPanel leftPanel = new JPanel();
 			leftPanel.add(createFilesystemButton());
-//			leftPanel.add(createClearButton());
+			//			leftPanel.add(createClearButton());
 
 			JPanel rightPanel = new JPanel();
 			rightPanel.add(createOKButton());
@@ -471,7 +488,7 @@ public class MapPropertiesDialog extends JDialog {
 							// Store for later use
 							AssetManager.putAsset(selectedAsset);
 							updatePreview();
-//							setBackgroundAsset(asset, getImageFileChooser().getSelectedThumbnailImage());
+							//							setBackgroundAsset(asset, getImageFileChooser().getSelectedThumbnailImage());
 						} catch (IOException ioe) {
 							MapTool.showError("Could not load that map: " + ioe);
 							selectedAsset = null;
@@ -482,11 +499,11 @@ public class MapPropertiesDialog extends JDialog {
 			return button;
 		}
 
-//		private JButton createClearButton() {
-//			JButton button = new JButton("Clear");
-//			
-//			return button;
-//		}
+		//		private JButton createClearButton() {
+		//			JButton button = new JButton("Clear");
+		//			
+		//			return button;
+		//		}
 
 		private JButton createOKButton() {
 			JButton button = new JButton("OK");
@@ -524,10 +541,10 @@ public class MapPropertiesDialog extends JDialog {
 					}
 					Integer imageIndex = (Integer) selectedList.get(0);
 
-//					if (getBackgroundAsset() != null) {
-//						// Tighten memory usage
-//						ImageManager.flushImage(getBackgroundAsset());
-//					}
+					//					if (getBackgroundAsset() != null) {
+					//						// Tighten memory usage
+					//						ImageManager.flushImage(getBackgroundAsset());
+					//					}
 					selectedAsset = assetPanel.getAsset(imageIndex);
 
 					// Store for later use
