@@ -80,6 +80,7 @@ public class MacroManager {
 		registerMacro(new EmotePluralMacro());
 		registerMacro(new ExperimentsMacro());
 		registerMacro(new ThinkMacro());
+		registerMacro(new BubblesMacro());
 
 		registerMacro(UNDEFINED_MACRO);
 	}
