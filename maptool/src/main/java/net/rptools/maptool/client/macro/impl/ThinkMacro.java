@@ -25,8 +25,8 @@ import net.rptools.maptool.model.Token;
 
 @MacroDefinition(
 		name = "think",
-		aliases = { "%" },
-		description = "think.description")
+		aliases = { "%", "tp" },
+		description = "% Psychic quotes %")
 public class ThinkMacro extends AbstractMacro {
 	public void execute(MacroContext context, String macro, MapToolMacroContext executionContext) {
 		macro = processText(macro);

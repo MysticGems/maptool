@@ -25,8 +25,8 @@ import net.rptools.maptool.model.Token;
 
 @MacroDefinition(
 		name = "bubble",
-		aliases = { "oo" },
-		description = "bubble.description")
+		aliases = { "oo", ".oO", "oO" },
+		description = ". o O ( Thinking... )")
 public class BubblesMacro extends AbstractMacro {
 	public void execute(MacroContext context, String macro, MapToolMacroContext executionContext) {
 		macro = processText(macro);
@@ -54,11 +54,11 @@ public class BubblesMacro extends AbstractMacro {
 			sb.append("<span class='trustedPrefix' ").append("title='").append(executionContext.getName());
 			sb.append("@").append(executionContext.getSouce()).append("'>");
 		}
-		sb.append(identity).append(" thinks, ");
+		sb.append(identity).append(": ");
 		if (executionContext != null && MapTool.getParser().isMacroPathTrusted() && !MapTool.getPlayer().isGM()) {
 			sb.append("</span>");
 		}
-		sb.append(".oO ( ");
+		sb.append(". o O ( ");
 
 		Color color = MapTool.getFrame().getCommandPanel().getTextColorWell().getColor();
 		if (color != null) {
