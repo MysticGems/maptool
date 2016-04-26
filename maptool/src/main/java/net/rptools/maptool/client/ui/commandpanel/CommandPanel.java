@@ -374,7 +374,8 @@ public class CommandPanel extends JPanel implements Observer {
 				}
 			};
 			commandTextArea.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-			commandTextArea.setPreferredSize(new Dimension(50, 40)); // XXX should be resizable
+			// commandTextArea.setPreferredSize(new Dimension(50, 40)); 
+			commandTextArea.setPreferredSize(new Dimension(50, 80)); // XXX should be resizable
 			commandTextArea.setFont(new Font("sans-serif", 0, AppPreferences.getFontSize()));
 			commandTextArea.addKeyListener(new ChatTypingListener());
 			SwingUtil.useAntiAliasing(commandTextArea);
